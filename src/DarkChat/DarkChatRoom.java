@@ -21,7 +21,7 @@ public class DarkChatRoom {
         users.remove(username);
     }
 
-    public Set<String> getUsernames(){
+    public Set<String> getUserNames(){
         return users.keySet();
     }
 

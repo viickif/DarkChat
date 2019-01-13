@@ -3,9 +3,7 @@ package DarkChat;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 public class DarkServer {
@@ -61,7 +59,7 @@ public class DarkServer {
         out.println("You have joined chat room "+ chatRoom.getCode()+".");
         out.println("================ D A R K   C H A T =====================================================");
 
-        Set<String> usernames=chatRoom.getUsernames();
+        Set<String> usernames=chatRoom.getUserNames();
 
         try {
             for (String message = in.readLine(); message != null; message = in
@@ -88,11 +86,11 @@ public class DarkServer {
             }
             //user disconnects
         } catch(IOException ioe){
+            chatRoom.removeUser(myName);
             if(chatRoom.isEmpty()){
-                rooms.remove(chatRoom.getCode());
+                rooms.remove(Integer.valueOf(chatRoom.getCode()));
             }
             else {
-                chatRoom.removeUser(myName);
                 for (String user : usernames) {
                     System.out.println("sending to: " + user + " " + chatRoom.getPrintWriter(user));
                     chatRoom.getPrintWriter(user).println(myName + " has left the chat.");
