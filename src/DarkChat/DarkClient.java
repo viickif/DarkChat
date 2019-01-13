@@ -2,7 +2,6 @@ package DarkChat;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.*;
 
 public class DarkClient {
     private Socket socket;
@@ -14,8 +13,9 @@ public class DarkClient {
     /**
      * Make a DB221StudentClient and connect it to a server running on
      * hostname at the specified port.
+     *
      * @param hostname, name of host
-     * @param port to connect to
+     * @param port      to connect to
      * @throws IOException if can't connect
      */
     public DarkClient(String hostname, int port) throws IOException {
@@ -27,6 +27,7 @@ public class DarkClient {
 
     /**
      * Send a request to the server. Requires this is "open".
+     *
      * @param myMessage to execute in database
      * @throws IOException if network or server failure
      */
@@ -39,11 +40,12 @@ public class DarkClient {
     /**
      * Get a reply from the next request that was submitted.
      * Requires this is "open".
+     *
      * @return reply from server
      * @throws IOException if network or server failure
      */
     public String getReply() throws IOException {
-        if (in.ready()){
+        if (in.ready()) {
             return in.readLine();
         } else {
             return null;
@@ -53,6 +55,7 @@ public class DarkClient {
     /**
      * Closes the client's connection to the server.
      * This client is now "closed". Requires this is "open".
+     *
      * @throws IOException if close fails
      */
     public void close() throws IOException {
@@ -75,14 +78,14 @@ public class DarkClient {
         do {
             try {
                 //if the user has a message or command to send, listen
-                if(br.ready()) {
+                if (br.ready()) {
                     String command = br.readLine();
                     client.sendRequest(command);
                 }
 
                 // otherwise, listen for messages from others
                 String reply = client.getReply();
-                if(reply!=null) {
+                if (reply != null) {
                     System.out.println(reply);
                 }
 

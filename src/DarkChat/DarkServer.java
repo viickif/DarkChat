@@ -66,8 +66,17 @@ public class DarkServer {
         try {
             for (String message = in.readLine(); message != null; message = in
                     .readLine()) {
-                if(message.startsWith("*")){
+                if(message.startsWith("psst/")){
+                    String[] whisperStr=message.split("/");
+                    String[] whisperUsers=whisperStr[1].split(" ");
 
+                    for(String user : whisperUsers){
+                        if(!user.isEmpty() && chatRoom.containsUser(user)){
+                            chatRoom.getPrintWriter(user).println(myName + " **psst** : " + whisperStr[2].trim());
+                        } else{
+                            out.println("**"+user + " is not a valid user**");
+                        }
+                    }
                 }
             else {
                     for (String user : usernames) {
