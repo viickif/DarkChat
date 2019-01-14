@@ -13,11 +13,25 @@ public class DarkServer {
     private static final String NAME_PATTERN = "^[a-zA-Z0-9]+$";
     private static final int MAX_ROOMS = 30;
 
+    /**
+     * Creates a new DarkServer. DB221Server is a server that
+     * allows clients to connect to it and execute group chat room
+     * features
+     * @param port where server listens for connections
+     * @throws IOException if I/O errors occur while opening socket
+     */
     public DarkServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         rooms = new HashMap<>();
     }
 
+
+    /**
+     * Listens for client connection and handles the client
+     * when they connect
+     * @throws IOException if I/O error occurs while waiting for
+     * connection
+     */
     public void serve() throws IOException {
         while (true) {
             // block until a client connects
@@ -40,6 +54,13 @@ public class DarkServer {
         }
     }
 
+
+    /**
+     * Handles the client by initiating a chat room for the client
+     * and executing messaging features
+     * @param socket where client is connected
+     * @throws IOException if connection encounters an error
+     */
     private void handle(Socket socket) throws IOException {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -55,6 +76,13 @@ public class DarkServer {
 
     }
 
+    /**
+     * Executes group messaging function
+     * @param chatRoom that group messaging is occuring in
+     * @param myName user name of the client
+     * @param in  input stream of messages from client
+     * @param out to send output stream of messages
+     */
     private void message(DarkChatRoom chatRoom, String myName, BufferedReader in, PrintWriter out) {
         out.println("You have joined chat room " + chatRoom.getCode() + ".");
         out.println("================ D A R K   C H A T ============================"
@@ -88,9 +116,18 @@ public class DarkServer {
             //user disconnects
         } catch (IOException ioe) {
            disconnectUser(chatRoom, myName);
+        } finally {
+            out.close();
         }
     }
 
+    /**
+     * Disconnects the client from the chat room and sends a message notifying
+     * the remaining users in the chat room that the client has disconnected.
+     * If the chat room has no remaining users in it, the chat room is deleted.
+     * @param chatRoom to disconnect the client from
+     * @param myName user name of the client that
+     */
     private void disconnectUser(DarkChatRoom chatRoom, String myName) {
         chatRoom.removeUser(myName);
         if (chatRoom.isEmpty()) {
@@ -102,6 +139,14 @@ public class DarkServer {
         }
     }
 
+    /**
+     * Allows the client to set up their username within the
+     * chat room
+     * @param chatRoom to join
+     * @param in input stream from client
+     * @param out to send output stream of replies from the server
+     * @return user name of the client
+     */
     private String initializeUser(DarkChatRoom chatRoom, BufferedReader in, PrintWriter out) {
         out.println("Enter your username.");
 
@@ -130,6 +175,13 @@ public class DarkServer {
         return null;
     }
 
+    /**
+     * Allows the client to join an existing chat room by providing an
+     * access code or initialize a new chat room
+     * @param in input stream from client
+     * @param out to send output stream of replies from server
+     * @return the existing or new chat room the client joined
+     */
     private DarkChatRoom initializeRoom(BufferedReader in, PrintWriter out) {
         int code = -1;
         boolean goodCode;
@@ -174,6 +226,10 @@ public class DarkServer {
         return rooms.get(code);
     }
 
+    /**
+     * Generates an access code from 0-29 for a new chat room
+     * @return access code of the new chat room
+     */
     private int getCode() {
         for (int i = 0; i < MAX_ROOMS; i++) {
             if (!rooms.containsKey(i)) {
@@ -183,6 +239,9 @@ public class DarkServer {
         return -1;
     }
 
+    /**
+     * Starts a DarkServer at port 9000
+     */
     public static void main(String[] args) {
         DarkServer server;
         try {
