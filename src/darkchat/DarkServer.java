@@ -13,8 +13,9 @@ public class DarkServer {
     private static final String NAME_PATTERN = "^[a-zA-Z0-9]+$";
     private static final int MAX_ROOMS = 30;
 
+
     /**
-     * Creates a new DarkServer. DB221Server is a server that
+     * Creates a new DarkServer. DarkServer is a server that
      * allows clients to connect to it and execute group chat room
      * features
      * @param port where server listens for connections

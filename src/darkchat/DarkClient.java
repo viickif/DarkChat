@@ -8,7 +8,6 @@ public class DarkClient {
     private BufferedReader in;
     private PrintWriter out;
 
-    //Rep Invariant: socket, in, out !=null
 
     /**
      * Make a DarkClient and connect it to a server running on
@@ -33,7 +32,7 @@ public class DarkClient {
      */
     public void sendRequest(String myMessage) throws IOException {
         out.print(myMessage + "\n");
-        out.flush(); // important! make sure x actually gets sent
+        out.flush();
     }
 
 
