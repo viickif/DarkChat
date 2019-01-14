@@ -1,5 +1,5 @@
 # Dark Chat
-Dark Chat is a group chat program implemented in Java with a variety of fun features!
+Dark Chat is a Java group chat program with a variety of fun features!
 
 ## Features
 - Initialize a new chat room by entering
