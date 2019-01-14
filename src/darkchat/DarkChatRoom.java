@@ -1,4 +1,4 @@
-package DarkChat;
+package darkchat;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -8,13 +8,13 @@ public class DarkChatRoom {
     private int code;
     private HashMap<String, PrintWriter> users;
 
-    public DarkChatRoom(int code){
-        this.code=code;
-        users=new HashMap<>();
+    public DarkChatRoom(int code) {
+        this.code = code;
+        users = new HashMap<>();
     }
 
-    public void addUser(String username, PrintWriter writer){
-        users.put(username,writer);
+    public void addUser(String username, PrintWriter writer) {
+        users.put(username, writer);
     }
 
     public void removeUser(String username){
@@ -34,7 +34,7 @@ public class DarkChatRoom {
     }
 
     public boolean isEmpty(){
-        return users.size()==0;
+        return users.size() == 0;
     }
 
     public String getCode(){

@@ -1,4 +1,4 @@
-package DarkChat;
+package darkchat;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -9,13 +9,13 @@ import java.util.Set;
 public class DarkServer {
     private ServerSocket serverSocket;
     private HashMap<Integer, DarkChatRoom> rooms;
-    private static final String CODE_PATTERN="^[0-9]+$";
+    private static final String CODE_PATTERN = "^[0-9]+$";
     private static final String NAME_PATTERN = "^[a-zA-Z0-9]+$";
-    private static final int MAX_ROOMS=30;
+    private static final int MAX_ROOMS = 30;
 
-    public DarkServer(int port) throws IOException{
+    public DarkServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-        rooms=new HashMap<>();
+        rooms = new HashMap<>();
     }
 
     public void serve() throws IOException {
@@ -48,35 +48,36 @@ public class DarkServer {
         PrintWriter out = new PrintWriter(new OutputStreamWriter(
                 socket.getOutputStream()), true);
 
-        DarkChatRoom chatRoom = initializeRoom(in,out);
-        String username=initializeUser(chatRoom, in, out);
+        DarkChatRoom chatRoom = initializeRoom(in, out);
+        String username = initializeUser(chatRoom, in, out);
 
         message(chatRoom, username, in, out);
 
     }
 
-    private void message(DarkChatRoom chatRoom,String myName, BufferedReader in, PrintWriter out){
-        out.println("You have joined chat room "+ chatRoom.getCode()+".");
-        out.println("================ D A R K   C H A T =====================================================");
+    private void message(DarkChatRoom chatRoom, String myName, BufferedReader in, PrintWriter out) {
+        out.println("You have joined chat room " + chatRoom.getCode() + ".");
+        out.println("================ D A R K   C H A T ============================"
+                + "=========================");
 
-        Set<String> usernames=chatRoom.getUserNames();
+        Set<String> usernames = chatRoom.getUserNames();
 
         try {
             for (String message = in.readLine(); message != null; message = in
                     .readLine()) {
-                if(message.startsWith("psst/")){
-                    String[] whisperStr=message.split("/");
-                    String[] whisperUsers=whisperStr[1].split(" ");
+                if (message.startsWith("psst/")) {
+                    String[] whisperStr = message.split("/");
+                    String[] whisperUsers = whisperStr[1].split(" ");
 
-                    for(String user : whisperUsers){
-                        if(!user.isEmpty() && chatRoom.containsUser(user)){
-                            chatRoom.getPrintWriter(user).println(myName + " **psst** : " + whisperStr[2].trim());
-                        } else{
-                            out.println("**"+user + " is not a valid user**");
+                    for (String user : whisperUsers) {
+                        if (!user.isEmpty() && chatRoom.containsUser(user)) {
+                            chatRoom.getPrintWriter(user).println(myName
+                                    + " **psst** : " + whisperStr[2].trim());
+                        } else {
+                            out.println("**" + user + " is not a valid user**");
                         }
                     }
-                }
-            else {
+                } else {
                     for (String user : usernames) {
                         if (!user.equals(myName)) {
                             chatRoom.getPrintWriter(user).println(myName + ": " + message);
@@ -85,21 +86,23 @@ public class DarkServer {
                 }
             }
             //user disconnects
-        } catch(IOException ioe){
-            chatRoom.removeUser(myName);
-            if(chatRoom.isEmpty()){
-                rooms.remove(Integer.valueOf(chatRoom.getCode()));
-            }
-            else {
-                for (String user : usernames) {
-                    System.out.println("sending to: " + user + " " + chatRoom.getPrintWriter(user));
-                    chatRoom.getPrintWriter(user).println(myName + " has left the chat.");
-                }
+        } catch (IOException ioe) {
+           disconnectUser(chatRoom, myName);
+        }
+    }
+
+    private void disconnectUser(DarkChatRoom chatRoom, String myName) {
+        chatRoom.removeUser(myName);
+        if (chatRoom.isEmpty()) {
+            rooms.remove(Integer.valueOf(chatRoom.getCode()));
+        } else {
+            for (String user : chatRoom.getUserNames()) {
+                chatRoom.getPrintWriter(user).println(myName + " has left the chat.");
             }
         }
     }
 
-    private String initializeUser(DarkChatRoom chatRoom, BufferedReader in, PrintWriter out){
+    private String initializeUser(DarkChatRoom chatRoom, BufferedReader in, PrintWriter out) {
         out.println("Enter your username.");
 
         try {
@@ -107,28 +110,28 @@ public class DarkServer {
                     .readLine()) {
                 if (name.matches(NAME_PATTERN)) {
                     //username is already taken
-                    if(chatRoom.containsUser(name)){
-                        out.println(name+" is already taken. Try something else.");
+                    if (chatRoom.containsUser(name)) {
+                        out.println(name + " is already taken. Try something else.");
                         //username is valid
                     } else {
-                        chatRoom.addUser(name,out);
-                        out.println("Joining as "+name+" ...");
+                        chatRoom.addUser(name, out);
+                        out.println("Joining as " + name + " ...");
                         return name;
                     }
                     //something is wrong with username
-                } else{
+                } else {
                     out.println("Invalid username format.");
                     out.println("Username must only contain alphabetic letters and numbers");
                 }
             }
-        } catch(IOException ioe){
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
         return null;
     }
 
-    private DarkChatRoom initializeRoom(BufferedReader in, PrintWriter out){
-        int code=-1;
+    private DarkChatRoom initializeRoom(BufferedReader in, PrintWriter out) {
+        int code = -1;
         boolean goodCode;
 
         out.println("Welcome to Dark Chat");
@@ -142,38 +145,38 @@ public class DarkServer {
                 //create new chat room
                 if (line.equals("+")) {
                     code = getCode();
-                    if (code!=-1) {
+                    if (code != -1) {
                         rooms.put(code, new DarkChatRoom(code));
                         out.println("A new chat room was successfully created.");
-                        out.println("Chat room code: "+ Integer.toString(code));
+                        out.println("Chat room code: " + Integer.toString(code));
                         break;
                     } else {
                         out.println("All rooms are currently full. Try again later.");
                     }
                     //join existing chat room
                 } else if (line.matches(CODE_PATTERN)) {
-                    code=Integer.valueOf(line);
-                    goodCode=rooms.containsKey(code);
-                    if(goodCode){
-                        out.println("Selecting chat room "+code);
+                    code = Integer.valueOf(line);
+                    goodCode = rooms.containsKey(code);
+                    if (goodCode) {
+                        out.println("Selecting chat room " + code);
                         break;
-                    } else{
-                        out.println(line+" is an invalid chat room code. Try again.");
+                    } else {
+                        out.println(line + " is an invalid chat room code. Try again.");
                     }
                     //invalid command
                 } else {
                     out.println("Invalid command. Try again.");
                 }
             }
-        } catch(IOException ioe){
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
         return rooms.get(code);
     }
 
-    private int getCode(){
-        for(int i=0;i<MAX_ROOMS;i++){
-            if (!rooms.containsKey(i)){
+    private int getCode() {
+        for (int i = 0; i < MAX_ROOMS; i++) {
+            if (!rooms.containsKey(i)) {
                 return i;
             }
         }
@@ -184,7 +187,7 @@ public class DarkServer {
         DarkServer server;
         try {
             server = new DarkServer(9000);
-            System.out.println("DarkChat server is running...");
+            System.out.println("darkchat server is running...");
             server.serve();
         } catch (IOException ioe) {
             ioe.printStackTrace();

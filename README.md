@@ -1,2 +1,2 @@
-# DarkChat
+# darkchat
 Chat room Java program

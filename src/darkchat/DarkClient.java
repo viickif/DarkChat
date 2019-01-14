@@ -1,4 +1,4 @@
-package DarkChat;
+package darkchat;
 
 import java.io.*;
 import java.net.Socket;
@@ -11,12 +11,12 @@ public class DarkClient {
     //Rep Invariant: socket, in, out !=null
 
     /**
-     * Make a DB221StudentClient and connect it to a server running on
+     * Make a DarkClient and connect it to a server running on
      * hostname at the specified port.
      *
      * @param hostname, name of host
-     * @param port      to connect to
-     * @throws IOException if can't connect
+     * @param port to connect to
+     * @throws IOException if cannot connect
      */
     public DarkClient(String hostname, int port) throws IOException {
         socket = new Socket(hostname, port);
@@ -26,9 +26,9 @@ public class DarkClient {
     }
 
     /**
-     * Send a request to the server. Requires this is "open".
+     * Send a message to the server. Requires this is "open".
      *
-     * @param myMessage to execute in database
+     * @param myMessage to send to the serve
      * @throws IOException if network or server failure
      */
     public void sendRequest(String myMessage) throws IOException {
@@ -38,7 +38,7 @@ public class DarkClient {
 
 
     /**
-     * Get a reply from the next request that was submitted.
+     * Get a reply from the message that was submitted.
      * Requires this is "open".
      *
      * @return reply from server
@@ -64,6 +64,9 @@ public class DarkClient {
         socket.close();
     }
 
+    /**
+     * Uses DarkServer to initialize/join a chat room and send messages
+     */
     public static void main(String[] args) {
         DarkClient client = null;
 
