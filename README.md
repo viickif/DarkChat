@@ -7,14 +7,14 @@ Dark Chat is a Java group chat program with a variety of fun features!
 
 - Join an existing chat room by providing an access code to the chat room when prompted
 
-- Whisper to only specified users within a chat room by sending a message in the following format:
+- Whisper to only specified users within a chat room by typing a message in the terminal following this format:
 
   `psst/<user1 user2 user3 ...>/<whisper message>`
 
   For example:
   `psst/Amy Vicki John/this is a secret!`
  
- - Send a message to all users in the chat room by entering message followed by enter
+ - Send a message to all users in the chat room by typing message in the terminal followed by enter
   
   
 *More features coming soon*
