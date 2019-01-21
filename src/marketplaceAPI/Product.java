@@ -26,7 +26,7 @@ public class Product {
      * @return true if the inventory was not empty so the
      * product was purchased successfully and false otherwise
      */
-    public boolean purchaseProduct(){
+    public boolean purchase(){
         if(!inventoryIsEmpty()) {
             inventory--;
             return true;

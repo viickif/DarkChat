@@ -125,7 +125,7 @@ public class Marketplace {
      */
     public boolean purchaseProduct(String name){
         Product product=fetchOneProduct(name);
-        return product.purchaseProduct();
+        return product.purchase();
     }
 
 }

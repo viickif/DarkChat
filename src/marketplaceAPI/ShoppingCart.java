@@ -52,7 +52,6 @@ public class ShoppingCart {
         }
     }
 
-
     /**
      * removes products from cart if such product is in the cart
      * @param productName of the product to remove from the cart.
@@ -76,38 +75,68 @@ public class ShoppingCart {
     }
 
     /**
-     *
-     * @return
+     * Gets a list of the names of all products in the cart
+     * @return a list of the names of all products in the cart
      */
     public List<String> getAllCartItems(){
+        List<String> cartItems=new ArrayList<>();
 
+        for (Map.Entry<Product, Integer> pair : cart.entrySet()) {
+            cartItems.add(pair.getKey().getName());
+        }
+
+        return cartItems;
 
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Counts the number of a product in the cart
+     * @param name of product to get count of. Product must be in the cart.
+     * @return number of the product that is in the cart
      */
     public int getCartItemCount(String name){
-
-
+        return cart.get(shop.fetchOneProduct(name));
     }
 
     /**
-     *
-     * @param name
-     * @return
+     * Checks out and purchases all the products in the cart
+     * @return the total amount of money spent
+     * @throws IllegalStateException if there is no longer enough
+     * inventory of a product or the product has been removed by
+     * the shop owner.
      */
-    public boolean containsProduct(String name){
+    public double checkout() throws IllegalStateException {
+        //checks that all items in the cart are still available in the shop
+        //and that inventory is still available
+        if(allItemsAvailable()){
+            for (Map.Entry<Product, Integer> pair : cart.entrySet()) {
+                checkoutProduct(pair.getKey(),pair.getValue());
+            }
 
+            return total;
+        }
+
+        throw new IllegalStateException();
     }
 
-    /**
-     *
-     */
-    public void checkout(){
+    private void checkoutProduct(Product product, int num){
+        for(int i=0;i<num;i++){
+            product.purchase();
+        }
+    }
 
+    private boolean allItemsAvailable(){
+        int num;
+        Product product;
+        for (Map.Entry<Product, Integer> pair : cart.entrySet()) {
+            num=pair.getValue();
+            product=pair.getKey();
+
+            if(num>product.getInventory()||!shop.containsProduct(product.getName())){
+                return false;
+            }
+        }
+        return true;
     }
 
 
