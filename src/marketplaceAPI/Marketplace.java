@@ -65,9 +65,9 @@ public class Marketplace {
     /**
      * fetches the product with the specified name
      * if it exists
-     * @param name of the product to fetch. Such product
-     *             must exist in the marketplace
-     * @return the product matching the specified name
+     * @param name of the product to fetch.
+     * @return the product matching the specified name. Null if
+     * no such product exists
      */
     public Product fetchOneProduct(String name) {
         for(Product product:allProducts) {
