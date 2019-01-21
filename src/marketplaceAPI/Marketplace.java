@@ -5,6 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Marketplace holds products that are available for sale
+ * at a shop and executes shopping commands.
+ *
+ * Note: Various methods would be synchronized and thread safety
+ * would be considered if we were to make this a concurrent program
+ */
 public class Marketplace {
 
     private Set<Product> allProducts;
@@ -105,44 +112,20 @@ public class Marketplace {
      *                   in the markletplace.
      */
     public void removeProduct(String name){
-        for(Product product:allProducts){
-            if(product.getName().equals(name)){
-                allProducts.remove(product);
-            }
-        }
+        allProducts.remove(fetchOneProduct(name));
     }
 
-
-    /**
-     * Determines if a product in the marketplace has
-     * available inventory
-     * @param name of product to check inventory of. It must
-     *             exist in the marketplacr
-     * @return true if the product inventory > 0 and false otherwise
-     */
-    public boolean inventoryIsEmpty(String name){
-        for(Product product:allProducts){
-            if(product.getName().equals(name)){
-                return product.inventoryIsEmpty();
-            }
-        }
-        return false;
-    }
 
     /**Purchases a product in the marketplace
-     * @param name of product to purchase.
+     * @param name of product to purchase. Such product must exist
+     *             in the marketplace
      * @return true if the product inventory was not empty
      * and the product was purchased and false otherwise
      *
      */
     public boolean purchaseProduct(String name){
-        for(Product product:allProducts){
-            if(product.getName().equals(name)&& !product.inventoryIsEmpty()){
-                product.purchaseProduct();
-                return true;
-            }
-        }
-        return false;
+        Product product=fetchOneProduct(name);
+        return product.purchaseProduct();
     }
 
 }

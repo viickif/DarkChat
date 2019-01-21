@@ -1,5 +1,8 @@
 package marketplaceAPI;
 
+/**
+ * Product contains and sets information regarding a product
+ */
 public class Product {
     private String name;
     private double price;
@@ -20,9 +23,16 @@ public class Product {
 
     /**
      * Purchases one product
+     * @return true if the inventory was not empty so the
+     * product was purchased successfully and false otherwise
      */
-    public void purchaseProduct(){
-        inventory--;
+    public boolean purchaseProduct(){
+        if(!inventoryIsEmpty()) {
+            inventory--;
+            return true;
+        } else{
+            return false;
+        }
     }
 
     /**
@@ -32,6 +42,14 @@ public class Product {
      */
     public boolean inventoryIsEmpty(){
         return inventory<1;
+    }
+
+    /**gets the inventory of the product
+     *
+     * @return inventory count of the product;
+     */
+    public int getInventory(){
+        return inventory;
     }
 
     /**gets the name of the product
