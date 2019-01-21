@@ -98,6 +98,20 @@ public class Marketplace {
         allProducts.add(newProduct);
     }
 
+    /**
+     * Removes an existing product from the marketplace.
+     * @param name of product to remove. A product
+     *                   with the same name must currently exists
+     *                   in the markletplace.
+     */
+    public void removeProduct(String name){
+        for(Product product:allProducts){
+            if(product.getName().equals(name)){
+                allProducts.remove(product);
+            }
+        }
+    }
+
 
     /**
      * Determines if a product in the marketplace has
@@ -114,18 +128,21 @@ public class Marketplace {
         }
         return false;
     }
+
     /**Purchases a product in the marketplace
-     * @param name of product to purchase. Such product
-     *             must currently exist in the marketplace and
-     *             its inventory is not empty
+     * @param name of product to purchase.
+     * @return true if the product inventory was not empty
+     * and the product was purchased and false otherwise
      *
      */
-    public void purchaseProduct(String name){
+    public boolean purchaseProduct(String name){
         for(Product product:allProducts){
             if(product.getName().equals(name)&& !product.inventoryIsEmpty()){
                 product.purchaseProduct();
+                return true;
             }
         }
+        return false;
     }
 
 }
